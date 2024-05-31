@@ -17,19 +17,19 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BookSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(source='author.name')
-    genre = serializers.CharField(source='genre.name')
+    author = serializers.CharField(source='author.name', required=False, read_only=True)
+    genre = serializers.CharField(source='genre.name', required=False, read_only=True)
     class Meta:
         model = Book
         fields = '__all__'
 
     def create(self, validated_data):
-        author_name = validated_data.pop('author')['name']
-        genre_name = validated_data.pop('genre')['name']
+        author_name = validated_data.pop('author', None)
+        genre_name = validated_data.pop('genre', None)
 
-        author, created = Author.objects.get_or_create(name=author_name)
+        author = Author.objects.get_or_create(name=author_name)[0] if author_name else None
 
-        genre, created = Genre.objects.get_or_create(name=genre_name)
+        genre = Genre.objects.get_or_create(name=genre_name)[0] if genre_name else None
 
         book = Book.objects.create(author=author, genre=genre, **validated_data)
 

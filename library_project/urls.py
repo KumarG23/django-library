@@ -26,5 +26,6 @@ urlpatterns = [
     path('create-user/', create_user),
     path('books/', get_books),
     path('add_book/', create_book),
-    path('books/<int:pk>/', delete_book, name='delete-book'),
+    path('books/<int:pk>/delete/', delete_book, name='delete-book'),
+    path('books/<int:pk>/update/', update_book, name='update-book')
 ]

@@ -78,10 +78,12 @@ def create_book(request):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_book(request, pk):
+    user = request.user
+    profile = user.profile
     try:
-        book = Book.objects.get(pk=pk)
+        book = Book.objects.get(pk=pk, profile=profile)
     except Book.DoesNotExist:
-        return Response({'error': 'Book not found'}, status=404)
+        return Response({'error': 'Book not found'})
     
     serialized_book = BookSerializer(book, data=request.data)
     if serialized_book.is_valid():
@@ -95,7 +97,7 @@ def delete_book(request, pk):
     try:
         book = Book.objects.get(pk=pk)
     except Book.DoesNotExist:
-        return Response({'error': 'Book not found'}, status=404)
+        return Response({'error': 'Book not found'})
     
     book.delete()
     return Response(status=204)
