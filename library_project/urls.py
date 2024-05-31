@@ -16,7 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView
+from library_app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('profile/', get_profile),
+    path('token/', TokenObtainPairView.as_view()),
+    path('create-user/', create_user),
+    path('books/', get_books),
+    path('add_book/', create_book),
+    path('books/<int:pk>/', delete_book, name='delete-book'),
 ]
